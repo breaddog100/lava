@@ -118,7 +118,7 @@ function view_lava_logs() {
 function main_menu() {
     clear
     echo "===============Lava一键部署脚本==============="
-    echo "BreadGog出品，电报：https://t.me/breaddog"
+    echo "BreadDog出品，电报：https://t.me/breaddog"
     echo "最低配置：4C8G100G；推荐配置：4C16G512G"
     echo "1. 安装节点install node"
     echo "2. 查看cosmovisor状态cosmovisor status"
