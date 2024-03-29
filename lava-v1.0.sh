@@ -14,7 +14,7 @@ function install_node() {
 	temp_folder=$(mktemp -d) && cd $temp_folder
 	
 	echo "安装go环境..."
-	### Configurations
+	# Configurations
 	go_package_url="https://go.dev/dl/go1.20.5.linux-amd64.tar.gz"
 	go_package_file_name=${go_package_url##*\/}
 	# Download GO
