@@ -41,6 +41,7 @@ function install_node() {
 	# Copy the genesis.json file to the Lava config folder
 	cp genesis_json/genesis.json $lava_config_folder/genesis.json
 	
+	# Install cosmovisor
 	go install github.com/cosmos/cosmos-sdk/cosmovisor/cmd/cosmovisor@v1.0.0
 	# Create the Cosmovisor folder and copy config files to it
 	mkdir -p $lavad_home_folder/cosmovisor/genesis/bin/
@@ -50,6 +51,7 @@ function install_node() {
 	
 	# Set the environment variables
 	echo "# Setup Cosmovisor" >> ~/.profile
+	echo "PATH=$PATH:$HOME/.lava/cosmovisor/genesis/bin" >> ~/.profile
 	echo "export DAEMON_NAME=lavad" >> ~/.profile
 	echo "export CHAIN_ID=lava-testnet-2" >> ~/.profile
 	echo "export DAEMON_HOME=$HOME/.lava" >> ~/.profile
@@ -66,7 +68,6 @@ function install_node() {
 	--home $lavad_home_folder \
 	--overwrite
 	cp genesis_json/genesis.json $lava_config_folder/genesis.json
-	
 	cosmovisor version
 	
 	# Create Cosmovisor unit file
@@ -114,6 +115,27 @@ function view_lava_logs() {
 	$HOME/.lava/cosmovisor/current/bin/lavad status | jq .SyncInfo.catching_up
 }
 
+function view_wallets() {
+    read -r -p "请输入钱包地址: " wallet_addr
+    lavad query bank balances "$wallet_addr"
+}
+
+function add_wallet() {
+    read -r -p "请输入钱包名称: " wallet_name
+    lavad keys add "$wallet_name"
+    echo "钱包已创建，请备份钱包信息。"
+}
+
+function import_wallet() {
+    read -r -p "请输入钱包名称: " wallet_name
+    lavad keys add "$wallet_name" --recover
+}
+
+function check_balances() {
+    read -r -p "请输入钱包地址: " wallet_address
+    lavad query bank balances "$wallet_address"
+}
+
 # 主菜单
 function main_menu() {
     clear
@@ -124,6 +146,10 @@ function main_menu() {
     echo "2. 查看cosmovisor状态cosmovisor status"
     echo "3. 查看cosmovisor日志cosmovisor logs"
     echo "4. 查看节点日志view logs"
+    echo "5. 查看钱包view wallets"
+    echo "6. 创建钱包add wallet"
+    echo "7. 导入钱包import wallet"
+    echo "8. 查询余额check balances"
     echo "0. 退出脚本exit"
     read -r -p "请输入选项（0-8）: " OPTION
 
@@ -132,6 +158,10 @@ function main_menu() {
     2) check_cosmovisor_status ;;
     3) view_cosmovisor_logs ;;
     4) view_lava_logs ;;
+    5) view_wallets ;;
+    6) add_wallet ;;
+    7) import_wallet ;;
+    8) check_balances ;;
     0) echo "退出脚本。"; exit 0 ;;
     *) echo "无效选项，请重新输入。"; sleep 3 ;;
     esac
