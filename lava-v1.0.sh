@@ -112,59 +112,62 @@ function view_cosmovisor_logs() {
 
 function view_lava_logs() {
 	# Check if the node is currently in the process of catching up
-	$HOME/.lava/cosmovisor/current/bin/lavad status | jq .SyncInfo.catching_up
+	$HOME/.lava/cosmovisor/current/bin/lavad status | jq .SyncInfo
 }
 
 function view_wallets() {
-    read -r -p "请输入钱包地址: " wallet_addr
-    lavad query bank balances "$wallet_addr"
+    $HOME/.lava/cosmovisor/current/bin/lavad keys list
 }
 
 function add_wallet() {
     read -r -p "请输入钱包名称: " wallet_name
-    lavad keys add "$wallet_name"
+    $HOME/.lava/cosmovisor/current/bin/lavad keys add "$wallet_name"
     echo "钱包已创建，请备份钱包信息。"
 }
 
 function import_wallet() {
     read -r -p "请输入钱包名称: " wallet_name
-    lavad keys add "$wallet_name" --recover
+    $HOME/.lava/cosmovisor/current/bin/lavad keys add "$wallet_name" --recover
 }
 
 function check_balances() {
     read -r -p "请输入钱包地址: " wallet_address
-    lavad query bank balances "$wallet_address"
+    $HOME/.lava/cosmovisor/current/bin/lavad query bank balances "$wallet_address"
 }
 
 # 主菜单
 function main_menu() {
-    clear
-    echo "===============Lava一键部署脚本==============="
-    echo "BreadDog出品，电报：https://t.me/breaddog"
-    echo "最低配置：4C8G100G；推荐配置：4C16G512G"
-    echo "1. 安装节点install node"
-    echo "2. 查看cosmovisor状态cosmovisor status"
-    echo "3. 查看cosmovisor日志cosmovisor logs"
-    echo "4. 查看节点日志view logs"
-    echo "5. 查看钱包view wallets"
-    echo "6. 创建钱包add wallet"
-    echo "7. 导入钱包import wallet"
-    echo "8. 查询余额check balances"
-    echo "0. 退出脚本exit"
-    read -r -p "请输入选项（0-8）: " OPTION
-
-    case $OPTION in
-    1) install_node ;;
-    2) check_cosmovisor_status ;;
-    3) view_cosmovisor_logs ;;
-    4) view_lava_logs ;;
-    5) view_wallets ;;
-    6) add_wallet ;;
-    7) import_wallet ;;
-    8) check_balances ;;
-    0) echo "退出脚本。"; exit 0 ;;
-    *) echo "无效选项，请重新输入。"; sleep 3 ;;
-    esac
+	while true; do
+	    clear
+	    echo "===============Lava一键部署脚本==============="
+	    echo "BreadDog出品，电报：https://t.me/breaddog"
+	    echo "最低配置：4C8G100G；推荐配置：4C16G512G"
+	    echo "1. 安装节点install node"
+	    echo "2. 查看cosmovisor状态cosmovisor status"
+	    echo "3. 查看cosmovisor日志cosmovisor logs"
+	    echo "4. 查看节点日志view logs"
+	    echo "5. 查看钱包view wallets"
+	    echo "6. 创建钱包add wallet"
+	    echo "7. 导入钱包import wallet"
+	    echo "8. 查询余额check balances"
+	    echo "0. 退出脚本exit"
+	    read -r -p "请输入选项（0-8）: " OPTION
+	
+	    case $OPTION in
+	    1) install_node ;;
+	    2) check_cosmovisor_status ;;
+	    3) view_cosmovisor_logs ;;
+	    4) view_lava_logs ;;
+	    5) view_wallets ;;
+	    6) add_wallet ;;
+	    7) import_wallet ;;
+	    8) check_balances ;;
+	    0) echo "退出脚本。"; exit 0 ;;
+	    *) echo "无效选项，请重新输入。"; sleep 3 ;;
+	    esac
+	    echo "按任意键返回主菜单..."
+        read -n 1
+    done
 }
 
 # 显示主菜单
