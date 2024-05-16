@@ -248,9 +248,9 @@ function uninstall_node() {
 function main_menu() {
     while true; do
         clear
-        echo "===============Babylon一键部署脚本==============="
-        echo "沟通电报群：https://t.me/lumaogogogo"
-        echo "推荐配置：12C64G1T"
+        echo "===============Lava一键部署脚本==============="
+	    echo "沟通电报群：https://t.me/lumaogogogo"
+	    echo "最低配置：4C8G100G；推荐配置：4C16G500G"
         echo "1. 安装节点install node"
         echo "2. 创建钱包add wallet"
         echo "3. 导入钱包import wallet"
